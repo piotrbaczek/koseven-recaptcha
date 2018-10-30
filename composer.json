@@ -1,0 +1,19 @@
+{
+  "name": "piotrbaczek/koseven-recaptcha",
+  "description": "Koseven Recaptcha module",
+  "license": "Apache",
+  "keywords": [
+    "kohana",
+    "kohana-php7",
+    "koseven"
+  ],
+  "authors": [
+    {
+      "name": "Piotr Bączek",
+      "role": "developer"
+    }
+  ],
+  "require": {
+    "php": ">=7.0"
+  }
+}
