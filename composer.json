@@ -1,6 +1,7 @@
 {
   "name": "piotrbaczek/koseven-recaptcha",
   "description": "Koseven Recaptcha module",
+  "type" : "kohana-module",
   "license": "Apache",
   "keywords": [
     "kohana",
