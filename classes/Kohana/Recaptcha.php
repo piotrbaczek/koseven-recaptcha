@@ -1,56 +1,63 @@
 <?php
 
+/**
+ * Class Kohana_Recaptcha
+ */
+class Kohana_Recaptcha
+{
+    /** String PUBLIC_KEY_NAME Key where response is stored */
+    const PUBLIC_KEY_NAME = 'g-recaptcha';
+    const VERIFICATION_URL = '';
 
-class Kohana_Recaptcha {
+    /**
+     * Returns name of key added to form
+     * @return string
+     */
+    public static function getPublicKeyName()
+    {
+        return static::PUBLIC_KEY_NAME;
+    }
 
-	const PUBLIC_KEY_NAME = 'g-recaptcha';
-	/** @var string $publicKey */
-	private $publicKey;
+    /**
+     * Returns value of your public site key
+     * @return string
+     */
+    public static function getSiteKey()
+    {
+        $config = Kohana::$config->load('koseven-recaptcha');
+        return $config->get('site_key');
+    }
 
-	public function __construct()
-	{
-		$config                = Kohana::$config->load('koseven-recaptcha');
-		$this->publicKey       = $config->get('site_key');
-		$this->verificationUrl = $config->get('verification_url');
-	}
+    /**
+     * Validation method
+     * Can be used in Valid class
+     * @param String $response
+     * @return bool
+     */
+    public static function recaptchaValid(String $response)
+    {
+        $config = Kohana::$config->load('koseven-recaptcha');
+        $secretKey = $config->get('secret_key');
+        /** @var Request $request */
+        $request = Request::factory(static::VERIFICATION_URL);
+        $request
+            ->method(Request::POST)
+            ->post([
+                'secret' => $secretKey,
+                'response' => $response
+            ]);
+        $result = $request->execute();
+        if ($result->status() !== 200)
+        {
+            return FALSE;
+        }
 
-	public function getPublicKey()
-	{
-		return $this->publicKey;
-	}
+        $body = json_decode($result->body());
+        if ($body === NULL)
+        {
+            return FALSE;
+        }
 
-	public function getPrivateKey()
-	{
-		$config = Kohana::$config->load('koseven-recaptcha');
-		return $config->get('secret_key');
-	}
-
-	public function validate($response)
-	{
-		if (isset($response[static::PUBLIC_KEY_NAME]))
-		{
-			/** @var Request $request */
-			$request = Request::factory($this->verificationUrl);
-			$request->method(Request::POST);
-			$request->post('secret', $this->getPrivateKey());
-			$request->post('response', $response[static::PUBLIC_KEY_NAME]);
-			$result = $request->execute();
-			if ($result->status() !== 200)
-			{
-				return FALSE;
-			}
-
-			$body = json_decode($result->body());
-			if ($body === NULL)
-			{
-				return FALSE;
-			}
-
-			return $body->success;
-		}
-		else
-		{
-			return FALSE;
-		}
-	}
+        return $body->success;
+    }
 }
