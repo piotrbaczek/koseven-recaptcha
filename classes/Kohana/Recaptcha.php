@@ -48,12 +48,13 @@ class Kohana_Recaptcha
                 'secret' => $secretKey,
                 'response' => $response
             ]);
+        
         $result = $request->execute();
         if ($result->status() !== 200)
         {
             return FALSE;
         }
-        Log::instance()->add(Log::DEBUG, $result->body());
+        
         $body = json_decode($result->body());
         if ($body === NULL)
         {
