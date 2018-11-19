@@ -7,7 +7,7 @@ class Kohana_Recaptcha
 {
     /** String PUBLIC_KEY_NAME Key where response is stored */
     const PUBLIC_KEY_NAME = 'g-recaptcha';
-    const VERIFICATION_URL = '';
+    const VERIFICATION_URL = 'https://www.google.com/recaptcha/api/siteverify';
 
     /**
      * Returns name of key added to form
