@@ -2,6 +2,7 @@
 
 /**
  * Class Kohana_Recaptcha
+ * @author Piotr Bączek
  */
 class Kohana_Recaptcha
 {
@@ -31,10 +32,11 @@ class Kohana_Recaptcha
     /**
      * Validation method
      * Can be used in Valid class
-     * @param String $response
+     * @param String $response Response token from frontend google recaptcha
+     * @param String $action Name of action from JS (homepage, login, etc.)
      * @return bool
      */
-    public static function recaptchaValid(String $response)
+    public static function recaptchaValid(String $response, String $action)
     {
         $config = Kohana::$config->load('koseven-recaptcha');
         $secretKey = $config->get('secret_key');
@@ -51,13 +53,13 @@ class Kohana_Recaptcha
         {
             return FALSE;
         }
-
+        Log::instance()->add(Log::DEBUG, $result->body());
         $body = json_decode($result->body());
         if ($body === NULL)
         {
             return FALSE;
         }
 
-        return $body->success;
+        return $body->action == $action && $body->success;
     }
 }
