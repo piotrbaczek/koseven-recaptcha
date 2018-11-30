@@ -1,5 +1,6 @@
 Create PHP file:
 
+```
 <!DOCTYPE html>
 <html>
 <head>
@@ -25,9 +26,10 @@ Create PHP file:
 
 </body>
 </html>
+```
 
 Kohana Controller:
-
+```
 public function action_index()
     {
         $this->template->recaptcha = new Recaptcha();
@@ -49,3 +51,4 @@ public function action_index()
             }
         }
     }
+    ```
